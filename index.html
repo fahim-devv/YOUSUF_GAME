@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gop Gop Gop - Yousuf Edition</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+        }
+        /* Background Image: gop.jpg */
+        #gameArea {
+            width: 100%;
+            height: 320px;
+            background-image: url('gop.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #fff;
+            border-radius: 10px;
+        }
+        /* Main Character: yousuf.jpg */
+        #yousuf {
+            width: 60px;
+            height: 60px;
+            background-image: url('yousuf.jpg');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            bottom: 10px;
+            left: 50px;
+            border-radius: 50%; 
+            border: 2px solid white;
+        }
+        .jump-animation {
+            animation: jump 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        /* Obstacle: Banana Emoji */
+        #obstacle {
+            width: 40px;
+            height: 40px;
+            font-size: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 10px;
+            left: 620px;
+        }
+        /* UI and Scoreboard */
+        #ui {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+        .info-text {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        /* Mobile-friendly Jump Button */
+        #jumpBtn {
+            width: 100%;
+            max-width: 600px;
+            height: 70px;
+            margin-top: 10px;
+            background-color: #ff4757;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px #ff2a3b;
+            text-transform: uppercase;
+        }
+        #jumpBtn:active {
+            box-shadow: 0 2px #ff2a3b;
+            transform: translateY(3px);
+        }
+        /* Animations */
+        @keyframes jump {
+            0% { bottom: 10px; }
+            50% { bottom: 140px; }
+            100% { bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="gameContainer">
+        <div id="gameArea">
+            <div id="ui">
+                <div class="info
