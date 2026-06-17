@@ -11,52 +11,58 @@
             box-sizing: border-box;
         }
         body {
-            background-color: #222;
+            background-color: #1a1a2e;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
         #gameContainer {
             position: relative;
             width: 100%;
-            max-width: 600px;
-            height: 430px; /* বাটনসহ সুন্দর জায়গার জন্য একটু বাড়ানো হলো */
+            max-width: 500px;
             padding: 10px;
         }
-        /* Background Image: gop.jpg */
+        /* Cartoon Kitchen Theme Background Color */
         #gameArea {
             width: 100%;
-            height: 320px;
-            background-image: url('gop.jpg');
-            background-size: cover;
-            background-position: center;
+            height: 300px;
+            background: linear-gradient(to bottom, #ffdfba, #ffffba);
             position: relative;
             overflow: hidden;
-            border: 4px solid #fff;
-            border-radius: 10px;
+            border: 6px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
-        /* Main Character: yousuf.png (Updated to .png) */
-        #yousuf {
-            width: 60px;
-            height: 60px;
-            background-image: url('yousuf.png');
-            background-size: cover;
-            background-position: center;
+        /* Floor Design */
+        #floor {
+            width: 100%;
+            height: 20px;
+            background-color: #b07d62;
             position: absolute;
-            bottom: 10px;
+            bottom: 0;
+            left: 0;
+        }
+        /* Main Character Yousuf (Emoji base for instant loading without image files) */
+        #yousuf {
+            width: 50px;
+            height: 50px;
+            font-size: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 20px;
             left: 50px;
-            border-radius: 50%; 
-            border: 2px solid white;
             z-index: 10;
         }
         .jump-animation {
-            animation: jump 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            animation: jump 0.55s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        /* Obstacle: Banana Emoji */
+        /* Obstacle: Banana */
         #obstacle {
             width: 40px;
             height: 40px;
@@ -65,18 +71,18 @@
             justify-content: center;
             align-items: center;
             position: absolute;
-            bottom: 10px;
-            left: 620px;
+            bottom: 20px;
+            left: 520px;
             z-index: 5;
         }
-        /* UI and Scoreboard */
+        /* Scoreboard UI */
         #ui {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background: rgba(0,0,0,0.6);
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.75);
             color: white;
             position: absolute;
             top: 0;
@@ -84,33 +90,35 @@
             z-index: 20;
         }
         .info-text {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
+            letter-spacing: 1px;
         }
-        /* Mobile-friendly Jump Button */
+        /* Jump Button Styling */
         #jumpBtn {
             width: 100%;
-            height: 65px;
-            margin-top: 10px;
-            background-color: #ff4757;
+            height: 70px;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
             color: white;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 5px #ff2a3b;
+            box-shadow: 0 6px #cf3a46;
             text-transform: uppercase;
+            letter-spacing: 2px;
         }
         #jumpBtn:active {
-            box-shadow: 0 2px #ff2a3b;
-            transform: translateY(3px);
+            box-shadow: 0 2px #cf3a46;
+            transform: translateY(4px);
         }
-        /* Animations */
+        /* Jump Animation Settings */
         @keyframes jump {
-            0% { bottom: 10px; }
-            50% { bottom: 140px; }
-            100% { bottom: 10px; }
+            0% { bottom: 20px; }
+            50% { bottom: 150px; }
+            100% { bottom: 20px; }
         }
     </style>
 </head>
@@ -119,11 +127,12 @@
     <div id="gameContainer">
         <div id="gameArea">
             <div id="ui">
-                <div class="info-text">Score: <span id="score">0</span></div>
-                <div class="info-text">Speed: <span id="speedLvl">1x</span></div>
+                <div class="info-text">SCORE: <span id="score">0</span></div>
+                <div class="info-text">SPEED: <span id="speedLvl">1.0x</span></div>
             </div>
-            <div id="yousuf"></div>
+            <div id="yousuf">🏃‍♂️</div>
             <div id="obstacle">🍌</div>
+            <div id="floor"></div>
         </div>
         <button id="jumpBtn" onclick="jump()">JUMP</button>
     </div>
@@ -135,7 +144,7 @@
         const speedDisplay = document.getElementById("speedLvl");
 
         let score = 0;
-        let obstaclePosition = 600;
+        let obstaclePosition = 500;
         let gameSpeed = 5; 
         let gameInterval;
         let isGameOver = false;
@@ -147,14 +156,16 @@
         function gameLoop() {
             if (isGameOver) return;
 
+            // Obstacle Movement Logic
             obstaclePosition -= gameSpeed;
             if (obstaclePosition < -40) {
-                obstaclePosition = 600;
+                obstaclePosition = 500;
                 score++;
                 scoreDisplay.innerText = score;
 
-                if (score % 5 === 0) {
-                    gameSpeed += 1.5;
+                // Increase difficulty (speed) every 3 points
+                if (score % 3 === 0) {
+                    gameSpeed += 1.2;
                     speedDisplay.innerText = (gameSpeed / 5).toFixed(1) + "x";
                 }
             }
@@ -162,10 +173,12 @@
 
             let yousufBottom = parseInt(window.getComputedStyle(yousuf).getPropertyValue("bottom"));
             
-            if (obstaclePosition > 50 && obstaclePosition < 100 && yousufBottom <= 50) {
+            // Collision Detection Setup
+            if (obstaclePosition > 40 && obstaclePosition < 90 && yousufBottom <= 55) {
                 isGameOver = true;
                 clearInterval(gameInterval);
                 
+                // Keep your custom 'meow gop gop gop' alert text intact!
                 alert("Game Over meow gop gop gop\nYour Score: " + score);
                 resetGame();
             }
@@ -177,27 +190,30 @@
                 yousuf.classList.add("jump-animation");
                 setTimeout(function () {
                     yousuf.classList.remove("jump-animation");
-                }, 600);
+                }, 550);
             }
         }
 
+        // Spacebar key support for PC testing
         document.addEventListener("keydown", function (event) {
             if (event.code === "Space") {
                 jump();
             }
         });
 
+        // Reset the environment parameters
         function resetGame() {
             score = 0;
             gameSpeed = 5;
-            obstaclePosition = 600;
+            obstaclePosition = 500;
             isGameOver = false;
             scoreDisplay.innerText = score;
-            speedDisplay.innerText = "1x";
+            speedDisplay.innerText = "1.0x";
             obstacle.style.left = obstaclePosition + "px";
             startGame();
         }
 
+        // Initialize the cycle
         startGame();
     </script>
 </body>
